@@ -1,0 +1,2 @@
+﻿src/app/api/checkout/route.ts(6,3): error TS2322: Type '"2025-02-24.acacia"' is not assignable to type '"2026-02-25.clover"'.
+src/app/api/webhooks/stripe/route.ts(6,5): error TS2322: Type '"2025-02-24.acacia"' is not assignable to type '"2026-02-25.clover"'.
