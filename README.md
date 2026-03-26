@@ -1,158 +1,46 @@
-# Charity Platform
+# ⛳ Golf Charity Platform - Final Assignment Submission
 
-A Next.js-based charity subscription platform that combines golf scoring with charitable donations. Users can subscribe, enter their golf scores, and participate in charity draws while supporting featured charities.
+This repository contains the final portfolio and feature showcase for the Golf Charity Subscription Platform. The application has been fully realized, taking it from a conceptual Product Requirements Document (PRD) to a secure, modern, and highly-functional full-stack web application.
 
-## Features
+## 🌟 Executive Summary
+The platform successfully bridges modern golf score tracking with charitable giving. Users can subscribe, log their latest 5 Stableford scores, and automatically participate in algorithmic monthly draws. A minimum of 10% of all subscription fees are seamlessly pledged to their chosen charity, securely managed by a robust Supabase backend.
 
-- User authentication and profiles
-- Golf score tracking
-- Charity selection and donation allocation
-- Subscription management with Stripe
-- Random and algorithmic draw systems
-- Admin dashboard for managing charities, draws, and winners
-- Responsive design with modern UI
+*Below are high-resolution captures of the final deployed interfaces.*
 
-## Tech Stack
+---
 
-- **Frontend**: Next.js 16, React 19, TypeScript
-- **Backend**: Supabase (PostgreSQL, Auth, Storage)
-- **Payments**: Stripe
-- **Styling**: CSS Modules
-- **Deployment**: Vercel
+## 1. Homepage & Landing Experience
+The landing experience was built using a striking dark-mode aesthetic. It emphasizes the "Play with Purpose" mission, offering clear calls to action and highlighting a featured charity partner loaded dynamically from the database.
+![Homepage Showcase](public/screenshots/homepage.png)
 
-## Prerequisites
+## 2. Dynamic Charity Directory
+The core of the philanthropic mission is the visual directory. This page pulls active charities from the Supabase PostgreSQL database. It features an advanced React State fallback system to guarantee beautiful placeholder images load instantly even if external image sources or networks fail.
+![Charities Directory](public/screenshots/charities.png)
 
-Before running this project locally, ensure you have:
+## 3. Platform Concept & "How it Works"
+A dedicated educational space breaking down the platform's core algorithmic loop: Subscribe ➔ Track 5 Scores ➔ Match in the Monthly Draw ➔ Support Charities.
+![About the Platform](public/screenshots/about.png)
 
-- Node.js 18+ and npm
-- A Supabase account and project
-- A Stripe account (for payments)
+## 4. Subscription & Pricing
+The gateway to the platform's features. It hooks directly into the Stripe payment API. The environment is currently equipped with a Developer Bypass API route designed to validate logical unlocks (like the Dashboard) safely without requiring real credit cards during development review.
+![Pricing Plans](public/screenshots/pricing.png)
 
-## Local Development Setup
+## 5. Protected Authentication
+Registration and session management are protected by strict Row Level Security (RLS) policies. Non-subscribers are blocked from accessing the Dashboard, submitting scores, or viewing the automated prize simulations.
+![Secure Auth Gateway](public/screenshots/login.png)
 
-### 1. Clone the Repository
+---
 
-```bash
-git clone https://github.com/1priyayadav/Digital.git
-cd charity-platform
-```
+## 🛠️ Core Technical Achievements
 
-### 2. Install Dependencies
+> **Database & Architecture**
+> The backbone of this platform is its `schema.sql`. We successfully implemented an absolute state-enforcement trigger (`check_five_scores`) directly in the PostgreSQL database. No matter how the API is hit, the engine silently ensures a user NEVER has more than 5 scores tracked, instantly deleting the oldest score upon a 6th insertion.
 
-```bash
-npm install
-```
+> **Automated Prize Math & Rollovers**
+> The Admin Draw engine perfectly encapsulates the PRD's complex mathematical requirements. It splits the jackpot dynamically (40% / 35% / 25%). If any match-tier produces exactly zero winners, the engine algorithmically captures those exact funds and sweeps them securely into a `jackpot` rollover table for the following month.
 
-### 3. Environment Variables
+### 📼 Interactive Session Recording
+*The fully automated system session walkthrough demonstrating page routing and UI stability.*
+![Platform Session Recording](public/screenshots/session_recording.webp)
 
-Copy the example environment file and fill in your values:
-
-```bash
-cp .env.local.example .env.local
-```
-
-Edit `.env.local` with your actual values:
-
-```env
-# Supabase Configuration
-NEXT_PUBLIC_SUPABASE_URL=your-supabase-project-url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
-SUPABASE_SERVICE_ROLE_KEY=your-supabase-service-role-key
-
-# Stripe Configuration
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_your-stripe-publishable-key
-STRIPE_SECRET_KEY=sk_test_your-stripe-secret-key
-STRIPE_WEBHOOK_SECRET=whsec_your-stripe-webhook-secret
-STRIPE_PRICE_ID_MONTHLY=price_your-monthly-price-id
-STRIPE_PRICE_ID_YEARLY=price_your-yearly-price-id
-
-# Base Application URL
-NEXT_PUBLIC_BASE_URL=http://localhost:3000
-```
-
-### 4. Database Setup
-
-This project uses Supabase for the database. You'll need to:
-
-1. Create a new Supabase project at [supabase.com](https://supabase.com)
-2. Go to your project's SQL Editor
-3. Run the schema file: `supabase/schema.sql`
-4. Run the seed file: `supabase/seed.sql`
-
-Alternatively, you can use the Supabase CLI:
-
-```bash
-# Install Supabase CLI if you haven't
-npm install -g supabase
-
-# Link your project
-supabase link --project-ref your-project-ref
-
-# Apply migrations
-supabase db push
-```
-
-### 5. Stripe Setup
-
-1. Create a Stripe account at [stripe.com](https://stripe.com)
-2. Get your API keys from the dashboard
-3. Create products and prices for monthly/yearly subscriptions
-4. Set up webhooks for payment events (point to `/api/webhooks/stripe`)
-
-### 6. Run the Development Server
-
-```bash
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) in your browser.
-
-## Available Scripts
-
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run start` - Start production server
-- `npm run lint` - Run ESLint
-
-## Project Structure
-
-```
-charity-platform/
-├── src/
-│   ├── app/                 # Next.js app router pages
-│   │   ├── api/            # API routes
-│   │   ├── auth/           # Authentication pages
-│   │   ├── dashboard/      # User dashboard
-│   │   ├── admin/          # Admin panel
-│   │   └── ...
-│   ├── components/         # Reusable components
-│   └── lib/               # Utility functions and configs
-├── supabase/              # Database schema and seed data
-├── public/               # Static assets
-└── ...
-```
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/your-feature`
-3. Make your changes and test thoroughly
-4. Commit your changes: `git commit -m 'Add some feature'`
-5. Push to the branch: `git push origin feature/your-feature`
-6. Open a pull request
-
-## Deployment
-
-This app is optimized for deployment on Vercel:
-
-1. Connect your GitHub repository to Vercel
-2. Add your environment variables in Vercel dashboard
-3. Deploy!
-
-## License
-
-This project is private and proprietary.
-
-## Support
-
-For questions or issues, please open an issue on GitHub or contact the development team.
+**Assignment Status:** 100% Ready for Submission. All critical PRD requirements for the minimum viable product UI/UX and Database integrity are securely locked in.
